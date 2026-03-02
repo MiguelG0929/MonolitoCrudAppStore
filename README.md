@@ -23,6 +23,7 @@
 </div>
 
 📋 Tabla de Contenido
+
 🎯 Descripción General
 
 ✨ Características Principales
