@@ -64,8 +64,9 @@
 
 
 
-
+<div align="center">
 🎯 **Descripción General**
+</div>
 
 CRUD Store API es una aplicación backend desarrollada con Spring Boot que simula un sistema de gestión de inventario para una tienda real. Proporciona una API REST completa para administrar un catálogo de productos organizados en categorías.
 
