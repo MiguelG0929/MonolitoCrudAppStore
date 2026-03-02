@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  spring-crudstore-api:
+    container_name: spring-crudstore-api-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spring-crudstore-api-image
+    ports:
+      - "9525:9525"
+    networks:
+      - spring-network
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/crudstore_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SERVER_PORT: 9525
+      SECURITY_JWT_KEY_PRIVATE: 13e84f751d69db68ab9a6a4e46b6f1c7ea3373482549e791b991d09de2d911a8
+      SECURITY_JWT_USER_GENERATOR: AUTHOJWT-BACKEND
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: crudstore_db
+    ports:
+      - "5432:5432"
+    networks:
+      - spring-network
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+
+networks:
+  spring-network:
+
+volumes:
+  postgres_volume:

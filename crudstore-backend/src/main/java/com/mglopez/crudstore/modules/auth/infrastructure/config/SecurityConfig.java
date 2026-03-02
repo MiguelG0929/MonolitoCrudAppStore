@@ -9,7 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -97,12 +96,25 @@ public class SecurityConfig {
         return httpSecurity
                 // Deshabilita CSRF para APIs REST
                 .csrf(csrf -> csrf.disable())
-                // Habilita HTTP Basic como fallback
-                .httpBasic(Customizer.withDefaults())
-                // Política de sesión stateless (sin estado)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                //Desactivar auth clásica
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .formLogin(form -> form.disable())
+                .logout(logout -> logout.disable())
+
+                //SIN sesiones
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 // Configuración de autorización de endpoints
                 .authorizeHttpRequests(http -> {
+
+                    http.requestMatchers(
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/swagger-ui.html"
+                    ).permitAll();
+
                     // Endpoints de autenticación abiertos
                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
 

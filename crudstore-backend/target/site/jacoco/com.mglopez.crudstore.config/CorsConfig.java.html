@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CorsConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CrudStore</a> &gt; <a href="index.source.html" class="el_package">com.mglopez.crudstore.config</a> &gt; <span class="el_source">CorsConfig.java</span></div><h1>CorsConfig.java</h1><pre class="source lang-java linenums">package com.mglopez.crudstore.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+/**
+ * ------------------------------------------------------------------
+ * CONFIGURACIÓN DE CORS (Cross-Origin Resource Sharing)
+ * ------------------------------------------------------------------
+ * Este componente permite que el frontend (por ejemplo Angular en localhost:4200)
+ * pueda hacer peticiones HTTP al backend sin restricciones de origen.
+ *
+ * Propósito:
+ *  - Permitir comunicación entre frontend y backend en desarrollo.
+ *  - Evitar errores de CORS (Cross-Origin Request Blocked) en el navegador.
+ *
+ * Configuración:
+ *  - Se permiten todos los headers.
+ *  - Se permiten los métodos GET, POST, PUT, DELETE y OPTIONS.
+ *  - Se habilita el envío de cookies/credenciales.
+ *  - Solo se aplica a rutas que empiecen con /api/**
+ * ------------------------------------------------------------------
+ */
+@Configuration
+<span class="fc" id="L27">public class CorsConfig {</span>
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+<span class="fc" id="L31">        return new WebMvcConfigurer() {</span>
+
+            /**
+             * Método para registrar los mappings de CORS.
+             *
+             * @param registry objeto CorsRegistry para configurar los orígenes, métodos y headers permitidos
+             */
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+<span class="fc" id="L40">                registry.addMapping(&quot;/api/**&quot;) // Solo rutas que comiencen con /api/</span>
+<span class="fc" id="L41">                        .allowedOrigins(&quot;http://localhost:4200&quot;) // Origen permitido (frontend)</span>
+<span class="fc" id="L42">                        .allowedMethods(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;) // Métodos HTTP permitidos</span>
+<span class="fc" id="L43">                        .allowedHeaders(&quot;*&quot;) // Todos los headers permitidos</span>
+<span class="fc" id="L44">                        .allowCredentials(true); // Permitir cookies y credenciales</span>
+<span class="fc" id="L45">            }</span>
+        };
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

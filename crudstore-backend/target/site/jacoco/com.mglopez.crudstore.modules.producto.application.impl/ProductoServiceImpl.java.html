@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CrudStore</a> &gt; <a href="index.source.html" class="el_package">com.mglopez.crudstore.modules.producto.application.impl</a> &gt; <span class="el_source">ProductoServiceImpl.java</span></div><h1>ProductoServiceImpl.java</h1><pre class="source lang-java linenums">package com.mglopez.crudstore.modules.producto.application.impl;
+
+import com.mglopez.crudstore.modules.categoria.domain.CategoriaEntity;
+import com.mglopez.crudstore.modules.categoria.infrastructure.CategoriaRepository;
+import com.mglopez.crudstore.modules.producto.api.dtos.ProductoCreateDTO;
+import com.mglopez.crudstore.modules.producto.api.dtos.ProductoResponseDTO;
+import com.mglopez.crudstore.modules.producto.application.ProductoService;
+import com.mglopez.crudstore.modules.producto.domain.ProductoEntity;
+import com.mglopez.crudstore.modules.producto.infrastructure.ProductoRepository;
+import com.mglopez.crudstore.shared.exception.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * ------------------------------------------------------------------
+ * RESPONSABILIDAD
+ * ------------------------------------------------------------------
+ * Implementación de los casos de uso definidos en ProductoService.
+ *
+ * Contiene la lógica de aplicación encargada de coordinar la
+ * interacción entre el dominio Producto, los repositorios y la
+ * transformación de datos hacia DTOs utilizados por la capa API.
+ *
+ * ------------------------------------------------------------------
+ * ROL ARQUITECTÓNICO
+ * ------------------------------------------------------------------
+ * Capa   : Application
+ * Módulo : producto
+ *
+ * - Orquesta operaciones del sistema relacionadas con productos.
+ * - Aplica reglas de negocio básicas.
+ * - Gestiona transacciones.
+ * - Convierte entidades del dominio en DTOs de respuesta.
+ *
+ * No debe contener:
+ * - lógica HTTP
+ * - detalles de persistencia complejos
+ * - configuraciones de infraestructura
+ *
+ * ------------------------------------------------------------------
+ * TRANSACCIONALIDAD
+ * ------------------------------------------------------------------
+ * La anotación @Transactional asegura que cada operación se ejecute
+ * dentro de una transacción de base de datos, garantizando
+ * consistencia ante errores.
+ *
+ * ------------------------------------------------------------------
+ * DEPENDENCIAS
+ * ------------------------------------------------------------------
+ * - ProductoRepository → acceso a datos de productos.
+ * - CategoriaRepository → validación y asociación de categorías.
+ *
+ * Se utiliza inyección por constructor para favorecer:
+ * - inmutabilidad
+ * - testabilidad
+ * - buenas prácticas recomendadas por Spring.
+ * ------------------------------------------------------------------
+ */
+@Service
+@Transactional
+public class ProductoServiceImpl implements ProductoService {
+
+    private final ProductoRepository productoRepository;
+    private final CategoriaRepository categoriaRepository;
+
+    /**
+     * Inyección de dependencias mediante constructor.
+     * Método recomendado frente a @Autowired por claridad y testabilidad.
+     */
+    public ProductoServiceImpl(ProductoRepository productoRepository,
+<span class="fc" id="L74">                               CategoriaRepository categoriaRepository) {</span>
+<span class="fc" id="L75">        this.productoRepository = productoRepository;</span>
+<span class="fc" id="L76">        this.categoriaRepository = categoriaRepository;</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Crea un nuevo producto validando previamente la existencia
+     * de la categoría asociada.
+     *
+     * Flujo:
+     * DTO → Entidad → Persistencia → DTO respuesta
+     */
+    @Override
+    public ProductoResponseDTO crearProducto(ProductoCreateDTO dto) {
+
+<span class="fc" id="L89">        CategoriaEntity categoria = categoriaRepository.findById(dto.categoriaId())</span>
+<span class="fc" id="L90">                .orElseThrow(() -&gt; new ResourceNotFoundException(</span>
+<span class="fc" id="L91">                                &quot;Categoría no encontrada con ID: &quot; + dto.categoriaId()</span>
+                        ));
+
+<span class="fc" id="L94">        ProductoEntity producto = ProductoEntity.builder()</span>
+<span class="fc" id="L95">                .name(dto.name())</span>
+<span class="fc" id="L96">                .descripcion(dto.descripcion())</span>
+<span class="fc" id="L97">                .precio(dto.precio())</span>
+<span class="fc" id="L98">                .activo(true) // creación siempre inicia como activo</span>
+<span class="fc" id="L99">                .categoria(categoria)</span>
+<span class="fc" id="L100">                .build();</span>
+
+<span class="fc" id="L102">        producto = productoRepository.save(producto);</span>
+
+<span class="fc" id="L104">        return mapToResponseDTO(producto);</span>
+    }
+
+    /**
+     * Obtiene un producto por su identificador único.
+     * Lanza excepción si el producto no existe.
+     */
+    @Override
+    public ProductoResponseDTO obtenerPorId(Long id) {
+
+<span class="fc" id="L114">        ProductoEntity producto = productoRepository.findById(id)</span>
+<span class="fc" id="L115">                .orElseThrow(() -&gt;</span>
+<span class="fc" id="L116">                        new ResourceNotFoundException(</span>
+                                &quot;Producto no encontrado con ID: &quot; + id
+                        ));
+
+<span class="fc" id="L120">        return mapToResponseDTO(producto);</span>
+    }
+
+    /**
+     * Recupera únicamente los productos activos del sistema.
+     * Implementa filtrado lógico basado en el campo &quot;activo&quot;.
+     */
+    @Override
+    public List&lt;ProductoResponseDTO&gt; listarProductosActivos() {
+<span class="fc" id="L129">        return productoRepository.findByActivoTrue()</span>
+<span class="fc" id="L130">                .stream()</span>
+<span class="fc" id="L131">                .map(this::mapToResponseDTO)</span>
+<span class="fc" id="L132">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Lista productos activos pertenecientes a una categoría específica.
+     */
+    @Override
+    public List&lt;ProductoResponseDTO&gt; listarProductosPorCategoria(Long categoriaId) {
+<span class="fc" id="L140">        return productoRepository.findByCategoriaIdAndActivoTrue(categoriaId)</span>
+<span class="fc" id="L141">                .stream()</span>
+<span class="fc" id="L142">                .map(this::mapToResponseDTO)</span>
+<span class="fc" id="L143">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Actualiza los datos de un producto existente.
+     *
+     * Se valida:
+     * - existencia del producto
+     * - existencia de la categoría asociada
+     */
+    @Override
+    public ProductoResponseDTO actualizarProducto(Long id, ProductoCreateDTO dto) {
+
+<span class="fc" id="L156">        ProductoEntity producto = productoRepository.findById(id)</span>
+<span class="fc" id="L157">                .orElseThrow(() -&gt;</span>
+<span class="fc" id="L158">                        new ResourceNotFoundException(</span>
+                                &quot;Producto no encontrado con ID: &quot; + id
+                        ));
+
+<span class="fc" id="L162">        CategoriaEntity categoria = categoriaRepository.findById(dto.categoriaId())</span>
+<span class="fc" id="L163">                .orElseThrow(() -&gt;</span>
+<span class="nc" id="L164">                        new ResourceNotFoundException(</span>
+<span class="nc" id="L165">                                &quot;Categoría no encontrada con ID: &quot; + dto.categoriaId()</span>
+                        ));
+
+<span class="fc" id="L168">        producto.setName(dto.name());</span>
+<span class="fc" id="L169">        producto.setDescripcion(dto.descripcion());</span>
+<span class="fc" id="L170">        producto.setPrecio(dto.precio());</span>
+<span class="fc" id="L171">        producto.setCategoria(categoria);</span>
+
+<span class="fc" id="L173">        producto = productoRepository.save(producto);</span>
+
+<span class="fc" id="L175">        return mapToResponseDTO(producto);</span>
+    }
+
+    /**
+     * Realiza una eliminación lógica del producto.
+     *
+     * En lugar de borrar el registro físicamente, se marca como
+     * inactivo para preservar historial y evitar pérdida de datos.
+     */
+    @Override
+    public void eliminarProducto(Long id) {
+
+<span class="fc" id="L187">        ProductoEntity producto = productoRepository.findById(id)</span>
+<span class="fc" id="L188">                .orElseThrow(() -&gt;</span>
+<span class="fc" id="L189">                        new ResourceNotFoundException(</span>
+                                &quot;Producto no encontrado con ID: &quot; + id
+                        ));
+
+<span class="fc" id="L193">        producto.setActivo(false);</span>
+<span class="fc" id="L194">        productoRepository.save(producto);</span>
+<span class="fc" id="L195">    }</span>
+
+    /**
+     * Convierte una entidad ProductoEntity en un DTO de respuesta.
+     *
+     * Centralizar el mapeo evita duplicación y mantiene separadas
+     * las capas Domain y API.
+     */
+    private ProductoResponseDTO mapToResponseDTO(ProductoEntity producto) {
+<span class="fc" id="L204">        return new ProductoResponseDTO(</span>
+<span class="fc" id="L205">                producto.getId(),</span>
+<span class="fc" id="L206">                producto.getName(),</span>
+<span class="fc" id="L207">                producto.getDescripcion(),</span>
+<span class="fc" id="L208">                producto.getPrecio(),</span>
+<span class="fc" id="L209">                producto.getActivo(),</span>
+<span class="fc" id="L210">                producto.getCategoria().getId(),</span>
+<span class="fc" id="L211">                producto.getCategoria().getNombre(),</span>
+<span class="fc" id="L212">                producto.getFechaCreacion()</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

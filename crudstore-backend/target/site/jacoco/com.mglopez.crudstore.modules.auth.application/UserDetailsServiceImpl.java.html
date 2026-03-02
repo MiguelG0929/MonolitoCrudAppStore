@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDetailsServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CrudStore</a> &gt; <a href="index.source.html" class="el_package">com.mglopez.crudstore.modules.auth.application</a> &gt; <span class="el_source">UserDetailsServiceImpl.java</span></div><h1>UserDetailsServiceImpl.java</h1><pre class="source lang-java linenums">package com.mglopez.crudstore.modules.auth.application;
+
+import com.mglopez.crudstore.modules.auth.api.dtos.AuthCreateUserDTO;
+import com.mglopez.crudstore.modules.auth.api.dtos.AuthLoginRequestDTO;
+import com.mglopez.crudstore.modules.auth.api.dtos.AuthResponseDTO;
+import com.mglopez.crudstore.modules.auth.domain.RoleEntity;
+import com.mglopez.crudstore.modules.auth.domain.RoleEnum;
+import com.mglopez.crudstore.modules.auth.domain.UserEntity;
+import com.mglopez.crudstore.modules.auth.infrastructure.repositories.RoleRepository;
+import com.mglopez.crudstore.modules.auth.infrastructure.repositories.UserRepository;
+import com.mglopez.crudstore.modules.auth.infrastructure.security.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * ------------------------------------------------------------------
+ * SERVICIO DE USUARIOS Y AUTENTICACIÓN (UserDetailsServiceImpl)
+ * ------------------------------------------------------------------
+ * Implementación de UserDetailsService para integración con Spring Security.
+ * Gestiona:
+ *  - Carga de usuarios para autenticación
+ *  - Autenticación con usuario y contraseña
+ *  - Generación de JWT
+ *  - Creación de usuarios con roles y permisos
+ *
+ * ------------------------------------------------------------------
+ * ROL ARQUITECTÓNICO
+ * ------------------------------------------------------------------
+ * Capa   : Application / Service
+ * Módulo : auth
+ *
+ * - Integración de la capa de persistencia (repositorios de usuarios y roles)
+ *   con Spring Security.
+ * - Permite que la API REST use JWT para autenticación stateless.
+ * - Controla validaciones críticas: existencia de usuario, roles válidos,
+ *   contraseñas correctas y permisos asociados.
+ *
+ * ------------------------------------------------------------------
+ * MÉTODOS PRINCIPALES
+ * ------------------------------------------------------------------
+ * 1. loadUserByUsername(String username)
+ *      - Implementación obligatoria de UserDetailsService.
+ *      - Carga UserDetails para Spring Security.
+ *      - Convierte roles y permisos en authorities.
+ *
+ * 2. loginUser(AuthLoginRequestDTO authLoginRequestDTO)
+ *      - Autentica al usuario con credenciales.
+ *      - Genera token JWT si la autenticación es correcta.
+ *      - Retorna AuthResponseDTO con token y mensaje de éxito.
+ *
+ * 3. authenticate(String username, String password)
+ *      - Verifica que usuario exista y la contraseña sea correcta.
+ *      - Lanza BadCredentialsException en caso de fallo.
+ *      - Devuelve objeto Authentication para usar en SecurityContext.
+ *
+ * 4. createUser(AuthCreateUserDTO authCreateUserDTO)
+ *      - Crea un nuevo usuario en la base de datos.
+ *      - Valida roles proporcionados y genera contraseñas cifradas.
+ *      - Genera authorities y token JWT para el usuario recién creado.
+ *      - Retorna AuthResponseDTO con token y mensaje de éxito.
+ *
+ * ------------------------------------------------------------------
+ * BUENAS PRÁCTICAS Y NOTAS
+ * ------------------------------------------------------------------
+ * - Usar PasswordEncoder para almacenar contraseñas de forma segura.
+ * - Validar roles y permisos antes de persistir un usuario.
+ * - Generar JWT de manera consistente usando JwtUtils.
+ * - Mantener separation of concerns:
+ *      - Repositorios solo persistencia
+ *      - Servicio solo lógica de autenticación y autorización
+ * - Manejar excepciones de manera explícita (BadCredentialsException,
+ *   UsernameNotFoundException, IllegalArgumentException) para feedback claro.
+ * - Convertir roles y permisos en authorities para Spring Security.
+ * ------------------------------------------------------------------
+ */
+
+@Service
+<span class="fc" id="L93">public class UserDetailsServiceImpl implements UserDetailsService {</span>
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Para cifrado y validación de contraseñas
+
+    @Autowired
+    private JwtUtils jwtUtils; // Utilidad para crear y validar JWT
+
+    @Autowired
+    private UserRepository userRepository; // Repositorio de usuarios
+
+    @Autowired
+    private RoleRepository roleRepository; // Repositorio de roles
+
+    /**
+     * Carga un usuario por username para Spring Security
+     *
+     * @param username Nombre de usuario
+     * @return UserDetails con roles y permisos (authorities)
+     * @throws UsernameNotFoundException si el usuario no existe
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+<span class="nc" id="L116">        UserEntity userEntity = userRepository.findUserEntityByUsername(username)</span>
+<span class="nc" id="L117">                .orElseThrow(() -&gt; new UsernameNotFoundException(&quot;El usuario &quot; + username + &quot; no existe&quot;));</span>
+
+<span class="nc" id="L119">        List&lt;SimpleGrantedAuthority&gt; authorityList = new ArrayList&lt;&gt;();</span>
+
+        // Convertir roles a authorities
+<span class="nc" id="L122">        userEntity.getRoles()</span>
+<span class="nc" id="L123">                .forEach(role -&gt; authorityList.add(new SimpleGrantedAuthority(&quot;ROLE_&quot; + role.getRoleEnum().name())));</span>
+
+        // Convertir permisos de roles a authorities
+<span class="nc" id="L126">        userEntity.getRoles().stream()</span>
+<span class="nc" id="L127">                .flatMap(role -&gt; role.getPermissionsList().stream())</span>
+<span class="nc" id="L128">                .forEach(permission -&gt; authorityList.add(new SimpleGrantedAuthority(permission.getName())));</span>
+
+<span class="nc" id="L130">        return new User(</span>
+<span class="nc" id="L131">                userEntity.getUsername(),</span>
+<span class="nc" id="L132">                userEntity.getPassword(),</span>
+<span class="nc" id="L133">                userEntity.isEnabled(),</span>
+<span class="nc" id="L134">                userEntity.isAccountNonExpired(),</span>
+<span class="nc" id="L135">                userEntity.isCredentialsNonExpired(),</span>
+<span class="nc" id="L136">                userEntity.isAccountNonLocked(),</span>
+                authorityList
+        );
+    }
+
+    /**
+     * Método de login: autentica usuario y genera JWT
+     *
+     * @param authLoginRequestDTO DTO con username y password
+     * @return AuthResponseDTO con token JWT
+     */
+    public AuthResponseDTO loginUser(AuthLoginRequestDTO authLoginRequestDTO) {
+<span class="nc" id="L148">        String username = authLoginRequestDTO.username();</span>
+<span class="nc" id="L149">        String password = authLoginRequestDTO.password();</span>
+
+<span class="nc" id="L151">        Authentication authentication = this.authenticate(username, password);</span>
+<span class="nc" id="L152">        SecurityContextHolder.getContext().setAuthentication(authentication);</span>
+
+<span class="nc" id="L154">        String accessToken = jwtUtils.createToken(authentication);</span>
+
+<span class="nc" id="L156">        return new AuthResponseDTO(username, &quot;User logged successfully&quot;, accessToken, true);</span>
+    }
+
+    /**
+     * Autenticación explícita de usuario
+     *
+     * @param username Nombre de usuario
+     * @param password Contraseña
+     * @return Authentication con authorities
+     */
+    public Authentication authenticate(String username, String password) {
+<span class="nc" id="L167">        UserDetails userDetails = this.loadUserByUsername(username);</span>
+
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        if (!passwordEncoder.matches(password, userDetails.getPassword())) {</span>
+<span class="nc" id="L170">            throw new BadCredentialsException(&quot;Invalid username or password&quot;);</span>
+        }
+
+<span class="nc" id="L173">        return new UsernamePasswordAuthenticationToken(</span>
+                userDetails,
+                null,
+<span class="nc" id="L176">                userDetails.getAuthorities()</span>
+        );
+    }
+
+    /**
+     * Crea un nuevo usuario con roles y genera JWT
+     *
+     * @param authCreateUserDTO DTO con username, password y roles
+     * @return AuthResponseDTO con token JWT
+     */
+    public AuthResponseDTO createUser(AuthCreateUserDTO authCreateUserDTO) {
+<span class="nc" id="L187">        String username = authCreateUserDTO.username();</span>
+<span class="nc" id="L188">        String password = authCreateUserDTO.password();</span>
+
+        // Convertir roles de String -&gt; RoleEnum
+<span class="nc" id="L191">        List&lt;RoleEnum&gt; roleEnums = authCreateUserDTO.roleRequest()</span>
+<span class="nc" id="L192">                .roleListName()</span>
+<span class="nc" id="L193">                .stream()</span>
+<span class="nc" id="L194">                .map(role -&gt; RoleEnum.valueOf(role.toUpperCase()))</span>
+<span class="nc" id="L195">                .toList();</span>
+
+        // Buscar roles reales en la base de datos
+<span class="nc" id="L198">        Set&lt;RoleEntity&gt; roleEntitySet = roleRepository.findRoleEntitiesByRoleEnumIn(roleEnums)</span>
+<span class="nc" id="L199">                .stream()</span>
+<span class="nc" id="L200">                .collect(Collectors.toSet());</span>
+
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (roleEntitySet.isEmpty()) {</span>
+<span class="nc" id="L203">            throw new IllegalArgumentException(&quot;Los roles especificados no existen&quot;);</span>
+        }
+
+        // Crear entidad de usuario
+<span class="nc" id="L207">        UserEntity userEntity = UserEntity.builder()</span>
+<span class="nc" id="L208">                .username(username)</span>
+<span class="nc" id="L209">                .password(passwordEncoder.encode(password))</span>
+<span class="nc" id="L210">                .roles(roleEntitySet)</span>
+<span class="nc" id="L211">                .isEnabled(true)</span>
+<span class="nc" id="L212">                .accountNonLocked(true)</span>
+<span class="nc" id="L213">                .accountNonExpired(true)</span>
+<span class="nc" id="L214">                .credentialsNonExpired(true)</span>
+<span class="nc" id="L215">                .build();</span>
+
+<span class="nc" id="L217">        UserEntity userCreated = userRepository.save(userEntity);</span>
+
+        // Generar authorities
+<span class="nc" id="L220">        ArrayList&lt;SimpleGrantedAuthority&gt; authorityList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L221">        userCreated.getRoles().forEach(role -&gt;</span>
+<span class="nc" id="L222">                authorityList.add(new SimpleGrantedAuthority(&quot;ROLE_&quot; + role.getRoleEnum().name()))</span>
+        );
+<span class="nc" id="L224">        userCreated.getRoles().stream()</span>
+<span class="nc" id="L225">                .flatMap(role -&gt; role.getPermissionsList().stream())</span>
+<span class="nc" id="L226">                .forEach(permission -&gt; authorityList.add(new SimpleGrantedAuthority(permission.getName())));</span>
+
+        // Crear token JWT
+<span class="nc" id="L229">        Authentication authentication = new UsernamePasswordAuthenticationToken(</span>
+<span class="nc" id="L230">                userCreated.getUsername(),</span>
+                null,
+                authorityList
+        );
+<span class="nc" id="L234">        String accessToken = jwtUtils.createToken(authentication);</span>
+
+<span class="nc" id="L236">        return new AuthResponseDTO(</span>
+<span class="nc" id="L237">                userCreated.getUsername(),</span>
+                &quot;User created successfully&quot;,
+                accessToken,
+                true
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

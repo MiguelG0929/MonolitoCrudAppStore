@@ -3,7 +3,7 @@ package com.mglopez.crudstore.modules.auth.api.controller;
 import com.mglopez.crudstore.modules.auth.api.dtos.AuthCreateUserDTO;
 import com.mglopez.crudstore.modules.auth.api.dtos.AuthLoginRequestDTO;
 import com.mglopez.crudstore.modules.auth.api.dtos.AuthResponseDTO;
-import com.mglopez.crudstore.modules.auth.application.service.UserDetailsServiceImpl;
+import com.mglopez.crudstore.modules.auth.application.UserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

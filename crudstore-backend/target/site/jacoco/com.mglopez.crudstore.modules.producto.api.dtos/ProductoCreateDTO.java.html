@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoCreateDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CrudStore</a> &gt; <a href="index.source.html" class="el_package">com.mglopez.crudstore.modules.producto.api.dtos</a> &gt; <span class="el_source">ProductoCreateDTO.java</span></div><h1>ProductoCreateDTO.java</h1><pre class="source lang-java linenums">package com.mglopez.crudstore.modules.producto.api.dtos;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+import java.math.BigDecimal;
+
+/**
+ * DTO de entrada utilizado para crear un producto.
+ *
+ * Este record representa los datos que el cliente debe enviar
+ * al backend cuando desea registrar un nuevo producto.
+ */
+<span class="fc" id="L15">public record ProductoCreateDTO(</span>
+
+        /**
+         * Nombre del producto.
+         * No puede estar vacío ni ser null.
+         */
+        @NotBlank
+        String name,
+
+        /**
+         * Descripción del producto.
+         * No puede estar vacía ni ser null.
+         */
+        @NotBlank
+        String descripcion,
+
+        /**
+         * Precio del producto.
+         * Debe ser un valor positivo y obligatorio.
+         */
+        @NotNull
+        @Positive
+        BigDecimal precio,
+
+        /**
+         * ID de la categoría a la que pertenece el producto.
+         * Es obligatorio para asociar el producto con una categoría existente.
+         */
+        @NotNull
+        Long categoriaId
+) {}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

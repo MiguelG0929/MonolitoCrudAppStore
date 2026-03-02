@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoriaController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CrudStore</a> &gt; <a href="index.source.html" class="el_package">com.mglopez.crudstore.modules.categoria.api</a> &gt; <span class="el_source">CategoriaController.java</span></div><h1>CategoriaController.java</h1><pre class="source lang-java linenums">package com.mglopez.crudstore.modules.categoria.api;
+
+import com.mglopez.crudstore.modules.categoria.api.dtos.CategoriaCreateDTO;
+import com.mglopez.crudstore.modules.categoria.api.dtos.CategoriaResponseDTO;
+import com.mglopez.crudstore.modules.categoria.application.CategoriaService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * ------------------------------------------------------------------
+ * CONTROLADOR DE CATEGORÍAS
+ * ------------------------------------------------------------------
+ * Exposición de los endpoints REST para la gestión de categorías.
+ *
+ * - Coordina la interacción entre el cliente y la capa Application
+ *   mediante el servicio CategoriaService.
+ * - Valida la entrada de datos usando @Valid y DTOs.
+ * - Retorna respuestas HTTP con códigos apropiados (200, 201, 204).
+ *
+ * ------------------------------------------------------------------
+ * ROL ARQUITECTÓNICO
+ * ------------------------------------------------------------------
+ * Capa   : API / Controller
+ * Módulo : categoria
+ *
+ * - Controlador REST encargado de recibir peticiones HTTP y
+ *   delegarlas al servicio.
+ * - No contiene lógica de negocio; toda la lógica está en
+ *   CategoriaServiceImpl.
+ * - Utiliza DTOs de entrada y salida para desacoplar la API del dominio.
+ *
+ * ------------------------------------------------------------------
+ * ENDPOINTS
+ * ------------------------------------------------------------------
+ * POST /api/categorias/create
+ *      - Crear nueva categoría.
+ *      - Recibe CategoriaCreateDTO.
+ *      - Responde 201 CREATED con CategoriaResponseDTO.
+ *
+ * GET /api/categorias
+ *      - Lista todas las categorías activas.
+ *      - Responde 200 OK con lista de CategoriaResponseDTO.
+ *
+ * GET /api/categorias/{id}
+ *      - Obtiene una categoría por ID.
+ *      - Responde 200 OK o lanza excepción si no existe.
+ *
+ * PUT /api/categorias/{id}
+ *      - Actualiza una categoría existente.
+ *      - Recibe CategoriaCreateDTO.
+ *      - Responde 200 OK con CategoriaResponseDTO actualizado.
+ *
+ * DELETE /api/categorias/{id}
+ *      - Elimina (desactiva) una categoría.
+ *      - Respuesta 204 NO CONTENT.
+ *
+ * ------------------------------------------------------------------
+ * NOTAS IMPORTANTES
+ * ------------------------------------------------------------------
+ * - Todos los endpoints utilizan DTOs para garantizar seguridad
+ *   y desacoplamiento de la entidad de dominio.
+ * - Las validaciones se realizan automáticamente gracias a @Valid.
+ * - Los códigos de estado HTTP siguen las buenas prácticas REST.
+ * ------------------------------------------------------------------
+ */
+@RestController
+@RequestMapping(&quot;/api/categorias&quot;)
+public class CategoriaController {
+
+    private final CategoriaService categoriaService;
+
+<span class="fc" id="L76">    public CategoriaController(CategoriaService categoriaService) {</span>
+<span class="fc" id="L77">        this.categoriaService = categoriaService;</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Crea una nueva categoría.
+     *
+     * @param dto DTO de entrada con los datos de la categoría
+     * @return DTO de la categoría creada con código 201
+     */
+    @PostMapping(&quot;/create&quot;)
+    public ResponseEntity&lt;CategoriaResponseDTO&gt; crearCategoria(
+            @Valid @RequestBody CategoriaCreateDTO dto) {
+
+<span class="fc" id="L90">        CategoriaResponseDTO categoriaCreada = categoriaService.crearCategoria(dto);</span>
+<span class="fc" id="L91">        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaCreada);</span>
+    }
+
+    /**
+     * Lista todas las categorías activas.
+     *
+     * @return lista de CategoriaResponseDTO con código 200 OK
+     */
+    @GetMapping
+    public ResponseEntity&lt;List&lt;CategoriaResponseDTO&gt;&gt; listarCategoriasActivas() {
+<span class="fc" id="L101">        return ResponseEntity.ok(categoriaService.listarCategoriasActivas());</span>
+    }
+
+    /**
+     * Obtiene una categoría por su ID.
+     *
+     * @param id ID de la categoría
+     * @return DTO de la categoría con código 200 OK
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;CategoriaResponseDTO&gt; obtenerPorId(@PathVariable Long id) {
+<span class="fc" id="L112">        return ResponseEntity.ok(categoriaService.obtenerPorId(id));</span>
+    }
+
+    /**
+     * Actualiza una categoría existente.
+     *
+     * @param id  ID de la categoría a actualizar
+     * @param dto DTO con los datos nuevos
+     * @return DTO actualizado con código 200 OK
+     */
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;CategoriaResponseDTO&gt; actualizarCategoria(
+            @PathVariable Long id,
+            @Valid @RequestBody CategoriaCreateDTO dto) {
+
+<span class="fc" id="L127">        return ResponseEntity.ok(categoriaService.actualizarCategoria(id, dto));</span>
+    }
+
+    /**
+     * Elimina (desactiva) una categoría.
+     *
+     * - La eliminación es lógica; la categoría se marca como inactiva.
+     *
+     * @param id ID de la categoría
+     * @return respuesta 204 NO CONTENT
+     */
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; eliminarCategoria(@PathVariable Long id) {
+<span class="fc" id="L140">        categoriaService.eliminarCategoria(id);</span>
+<span class="fc" id="L141">        return ResponseEntity.noContent().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
