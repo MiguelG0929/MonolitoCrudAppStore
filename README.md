@@ -49,7 +49,27 @@ Funcionalidad	Estado	Descripción
 ✅ Dockerización Completa	Completo	Dockerfile y docker-compose.yml para levantar app + PostgreSQL.
 ✅ Inicialización Automática de Datos	Completo	DataInitializer que crea usuarios, roles y permisos por defecto al arrancar.
 
+<div align="center">
 
+✨ **Características Principales**
+
+| Funcionalidad                       | Estado    | Descripción                                                                                     |
+|------------------------------------|-----------|-------------------------------------------------------------------------------------------------|
+| ✅ CRUD de Productos                 | Completo  | Gestión completa de productos con soft delete (borrado lógico).                                 |
+| ✅ CRUD de Categorías                | Completo  | Organización de productos por categorías con validación de unicidad.                            |
+| ✅ Autenticación JWT                 | Completo  | Sistema seguro basado en tokens con Auth0 (HMAC256).                                            |
+| ✅ Roles y Permisos (RBAC)           | Completo  | Control de acceso granular con permisos READ, CREATE, UPDATE, DELETE.                           |
+| ✅ Seguridad por Endpoints           | Completo  | Protección de rutas basada en autoridades en SecurityConfig.                                    |
+| ✅ Validaciones                      | Completo  | Validación en capas de DTO y entidades con Bean Validation.                                     |
+| ✅ Manejo Global de Excepciones      | Completo  | Traducción de errores a códigos HTTP estándar con `@RestControllerAdvice`.                      |
+| ✅ CORS Configurado                  | Completo  | Listo para comunicación con frontend en `localhost:4200` (Angular).                             |
+| ✅ Pruebas Unitarias y de Slice      | Completo  | Tests para servicios y controladores con MockMvc y JUnit 5.                                     |
+| ✅ Cobertura de Código con JaCoCo    | Completo  | Configuración con mínimo del 60% de cobertura en línea.                                         |
+| ✅ Documentación OpenAPI (Swagger)   | Completo  | Documentación interactiva de la API disponible en `/swagger-ui.html`.                            |
+| ✅ Dockerización Completa            | Completo  | `Dockerfile` y `docker-compose.yml` para levantar app + PostgreSQL.                              |
+| ✅ Inicialización Automática de Datos| Completo  | `DataInitializer` que crea usuarios, roles y permisos por defecto al arrancar.                  |
+
+</div>
 
 
 
