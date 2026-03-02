@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.mglopez.crudstore.modules.producto.application.ProductoServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.267 s -- in com.mglopez.crudstore.modules.producto.application.ProductoServiceImplTest
