@@ -22,41 +22,26 @@
 
 </div>
  
+
 # Tabla de Contenido
 
-🎯 Descripción General
-
-✨ Características Principales
-
-🏗️ Arquitectura del Proyecto
-
-💻 Tecnologías Utilizadas
-
-🔐 Modelo de Seguridad (RBAC)
-
-📍 API Endpoints
-
-📂 Estructura de Archivos
-
-🗄️ Base de Datos
-
-⚙️ Instalación y Ejecución
-
-🧪 Tests y Cobertura de Código
-
-🚀 Despliegue con Docker
-
-🚨 Manejo de Excepciones
-
-📚 Documentación de la API (Swagger)
-
-🏗️ Patrones de Diseño Implementados
-
-🛣️ Roadmap / Plan Futuro
-
-👥 Autor
-
-📄 Licencia
+- 🎯 Descripción General
+- ✨ Características Principales
+- 🏗️ Arquitectura del Proyecto
+- 💻 Tecnologías Utilizadas
+- 🔐 Modelo de Seguridad (RBAC)
+- 📍 API Endpoints
+- 📂 Estructura de Archivos
+- 🗄️ Base de Datos
+- ⚙️ Instalación y Ejecución
+- 🧪 Tests y Cobertura de Código
+- 🚀 Despliegue con Docker
+- 🚨 Manejo de Excepciones
+- 📚 Documentación de la API (Swagger)
+- 🏗️ Patrones de Diseño Implementados
+- 🛣️ Roadmap / Plan Futuro
+- 👥 Autor
+- 📄 Licencia
 
 
 
@@ -779,7 +764,9 @@ of this software and associated documentation files...
 ```
 
 <div align="center">
+
 ⭐ Si este proyecto te ha sido útil, ¡no olvides darle una estrella en GitHub! ⭐  
 [⬆️ Volver al inicio](#tabla-de-contenido)
+
 </div>
 
