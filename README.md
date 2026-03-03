@@ -103,7 +103,10 @@ Público objetivo: Desarrolladores full-stack, equipos de desarrollo, empresas q
 </div>
 
 
-🏗️ **Arquitectura del Proyecto**
+<div align="center">
+🏗️**Arquitectura del Proyecto**
+</div>
+
 El proyecto sigue una Arquitectura Hexagonal (también conocida como Puertos y Adaptadores) y está organizada en módulos funcionales, asegurando un bajo acoplamiento y alta mantenibilidad.
 
 ~~~
