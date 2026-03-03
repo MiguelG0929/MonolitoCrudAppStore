@@ -208,5 +208,68 @@ El sistema implementa un modelo de seguridad **RBAC (Role-Based Access Control)*
 </div>
 
 
+## 🔄 Flujo de Autenticación y Autorización
+
+![Flujo de Seguridad](docs/flujo_security.png)
+
+---
+
+### 📝 Descripción del Flujo
+
+1️⃣ El cliente envía sus credenciales al endpoint `/auth/log-in`.
+
+2️⃣ `UserDetailsServiceImpl` valida al usuario contra la base de datos.
+
+3️⃣ Si las credenciales son válidas, `JwtUtils` genera un **token JWT** firmado con el algoritmo **HMAC256**.
+
+4️⃣ El token se envía al cliente como parte de la respuesta.
+
+5️⃣ En peticiones posteriores, el cliente incluye el token en el header:
+
+
+
+6️⃣ El filtro `JWTokenValidator` intercepta la petición, valida el token y extrae las autoridades (roles y permisos).
+
+7️⃣ **Spring Security** autoriza o deniega el acceso al endpoint según:
+   - Las autoridades extraídas del token
+   - La configuración definida en `SecurityConfig`
+
+---
+
+## 🎫 Estructura del Token JWT
+
+El token generado contiene información clave para autenticación y autorización.  
+Ejemplo decodificado:
+
+```json
+{
+  "iss": "AUTHOJWT-BACKEND",
+  "sub": "admin",
+  "authorities": "ROLE_ADMIN,READ,CREATE,UPDATE,DELETE",
+  "iat": 1640995200,
+  "exp": 1640997000,
+  "jti": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+🔎 Significado de los Claims
+
+iss → Emisor del token
+
+sub → Usuario autenticado
+
+authorities → Roles y permisos asignados
+
+iat → Fecha de emisión
+
+exp → Fecha de expiración
+
+jti → Identificador único del token
+
+
+
+
+
+
+
 
 
