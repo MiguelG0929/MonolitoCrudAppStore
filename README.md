@@ -21,8 +21,8 @@
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 </div>
-
-📋 Tabla de Contenido
+ 
+# Tabla de Contenido
 
 🎯 Descripción General
 
@@ -779,8 +779,7 @@ of this software and associated documentation files...
 ```
 
 <div align="center">
-⭐ Si este proyecto te ha sido útil, ¡no olvides darle una estrella en GitHub! ⭐
-⬆️ Volver al inicio
-
-</div> ```
+⭐ Si este proyecto te ha sido útil, ¡no olvides darle una estrella en GitHub! ⭐  
+[⬆️ Volver al inicio](#tabla-de-contenido)
+</div>
 
