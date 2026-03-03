@@ -104,7 +104,9 @@ Público objetivo: Desarrolladores full-stack, equipos de desarrollo, empresas q
 
 
 <div align="center">
-🏗️**Arquitectura del Proyecto**
+  
+🏗️ **Arquitectura del Proyecto** 
+  
 </div>
 
 El proyecto sigue una Arquitectura Hexagonal (también conocida como Puertos y Adaptadores) y está organizada en módulos funcionales, asegurando un bajo acoplamiento y alta mantenibilidad.
@@ -133,5 +135,30 @@ El proyecto sigue una Arquitectura Hexagonal (también conocida como Puertos y A
 │  └──────────────┘  └──────────────┘  └──────────────┘      │
 └─────────────────────────────────────────────────────────────┘
 ~~~
+
+### 🧱 Explicación de las Capas
+
+El proyecto está estructurado siguiendo los principios de **Arquitectura Hexagonal**, separando claramente responsabilidades:
+
+---
+
+🔹 **API Layer**  
+Recibe las peticiones HTTP, valida los DTOs de entrada y delega la ejecución en los servicios correspondientes.
+
+🔹 **Application Layer**  
+Contiene la lógica de negocio y los casos de uso. Orquesta las operaciones entre dominio e infraestructura.
+
+🔹 **Domain Layer**  
+Es el corazón del negocio. Define entidades, enums y reglas de negocio puras.  
+No tiene dependencias externas.
+
+🔹 **Infrastructure Layer**  
+Implementa los detalles técnicos: repositorios JPA, configuración de seguridad, filtros JWT, persistencia y adaptadores externos.
+
+---
+
+
+
+
 
 
