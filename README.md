@@ -382,14 +382,67 @@ También puedes explorarlos de forma interactiva en **Swagger UI** una vez la ap
   "fechaCreacion": "2024-01-15T10:32:00"
 }
 ```
+</details>
 
+## 📦 Productos (`/api/productos`)
 
+<div align="center">
 
+| Método | Endpoint                    | Descripción                                   | Permiso Requerido | Código HTTP     |
+|--------|----------------------------|-----------------------------------------------|-------------------|-----------------|
+| GET    | /                          | Listar todos los productos activos            | READ              | 200 OK          |
+| GET    | /{id}                      | Obtener un producto por ID                   | READ              | 200 OK          |
+| GET    | /categoria/{categoriaId}   | Listar productos activos por categoría        | READ              | 200 OK          |
+| POST   | /                          | Crear un nuevo producto                      | CREATE            | 201 CREATED     |
+| PUT    | /{id}                      | Actualizar un producto existente              | UPDATE            | 200 OK          |
+| DELETE | /{id}                      | Eliminar (desactivar) un producto             | DELETE            | 204 NO CONTENT  |
 
+</div>
 
+---
 
+<details>
+<summary><b>📝 Ejemplos de Request/Response para Productos</b></summary>
 
+<br>
 
+### ➕ Crear Producto — `POST /api/productos`
 
+```json
+// Request
+{
+  "name": "Laptop Gamer",
+  "descripcion": "Laptop con RTX 4060, 16GB RAM",
+  "precio": 1299.99,
+  "categoriaId": 1
+}
+```
 
+```
+// Response (201 CREATED)
+{
+  "id": 1,
+  "name": "Laptop Gamer",
+  "descripcion": "Laptop con RTX 4060, 16GB RAM",
+  "precio": 1299.99,
+  "activo": true,
+  "categoriaId": 1,
+  "categoriaNombre": "Electrónica",
+  "fechaCreacion": "2024-01-15T10:35:00"
+}
 
+// Response (200 OK)
+[
+  {
+    "id": 1,
+    "name": "Laptop Gamer",
+    "descripcion": "Laptop con RTX 4060, 16GB RAM",
+    "precio": 1299.99,
+    "activo": true,
+    "categoriaId": 1,
+    "categoriaNombre": "Electrónica",
+    "fechaCreacion": "2024-01-15T10:35:00"
+  }
+]
+```
+</details>
