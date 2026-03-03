@@ -430,7 +430,9 @@ También puedes explorarlos de forma interactiva en **Swagger UI** una vez la ap
   "categoriaNombre": "Electrónica",
   "fechaCreacion": "2024-01-15T10:35:00"
 }
-
+```
+### 📋 Listar Productos por Categoría — `GET /api/productos/categoria/1`
+```
 // Response (200 OK)
 [
   {
