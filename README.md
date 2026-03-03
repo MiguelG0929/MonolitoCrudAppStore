@@ -265,6 +265,81 @@ exp → Fecha de expiración
 
 jti → Identificador único del token
 
+## 📍 API Endpoints
+
+A continuación se detallan todos los endpoints disponibles en la API.  
+También puedes explorarlos de forma interactiva en **Swagger UI** una vez la aplicación esté corriendo.
+
+---
+
+## 🔑 Autenticación (`/auth`)
+
+<div align="center">
+
+| Método | Endpoint   | Descripción              | Request Body              | Response Body        | Código HTTP |
+|--------|------------|--------------------------|---------------------------|----------------------|------------|
+| POST   | /sign-up   | Registrar nuevo usuario  | `AuthCreateUserDTO`       | `AuthResponseDTO`    | 201 CREATED |
+| POST   | /log-in    | Iniciar sesión           | `AuthLoginRequestDTO`     | `AuthResponseDTO`    | 200 OK      |
+
+</div>
+
+---
+
+<details>
+<summary><b>📝 Ejemplos de Request/Response para Autenticación</b></summary>
+
+<br>
+
+### 🆕 Registro — `POST /auth/sign-up`
+
+```json
+// Request
+{
+  "username": "nuevo_usuario",
+  "password": "password123",
+  "roleRequest": {
+    "roleListName": ["USER", "INVITED"]
+  }
+}
+
+// Response (201 CREATED)
+{
+  "username": "nuevo_usuario",
+  "message": "User created successfully",
+  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "status": true
+}
+```
+🔐 Login — POST /auth/log-in
+
+```
+// Request
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+// Response (200 OK)
+{
+  "username": "admin",
+  "message": "User logged successfully",
+  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "status": true
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
