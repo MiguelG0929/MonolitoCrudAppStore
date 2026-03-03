@@ -105,7 +105,30 @@ Público objetivo: Desarrolladores full-stack, equipos de desarrollo, empresas q
 
 🏗️ **Arquitectura del Proyecto**
 El proyecto sigue una Arquitectura Hexagonal (también conocida como Puertos y Adaptadores) y está organizada en módulos funcionales, asegurando un bajo acoplamiento y alta mantenibilidad.
-![Arquitectura del Proyecto](docs/DiagramaArquitectura.png)
 
+~~~
+┌─────────────────────────────────────────────────────────────┐
+│                       🌐 API LAYER                           │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ Controllers  │  │     DTOs     │  │  Validation  │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+├─────────────────────────────────────────────────────────────┤
+│                    ⚙️ APPLICATION LAYER                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │   Services   │  │   Use Cases  │  │  Exceptions  │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+├─────────────────────────────────────────────────────────────┤
+│                      📦 DOMAIN LAYER                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │   Entities   │  │    Enums     │  │  Repository  │      │
+│  │              │  │              │  │  Interfaces  │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+├─────────────────────────────────────────────────────────────┤
+│                 🔧 INFRASTRUCTURE LAYER                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ Repositories │  │   Security   │  │  JPA/Hibernate│      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+~~~
 
 
