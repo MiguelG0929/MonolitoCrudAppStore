@@ -593,7 +593,83 @@ Almacena los productos del sistema:
 - Integridad referencial mediante claves foráneas
 
 
+## ⚙️ Instalación y Ejecución
 
+Sigue estos pasos para levantar el proyecto en tu entorno local.
 
+---
 
+### 📋 Prerrequisitos
 
+- ☕ **JDK 17 o superior** ([Descargar](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html))  
+- 🐘 **Maven 3.8+** (o usa el wrapper `./mvnw` incluido)  
+- 🐘 **PostgreSQL 15+** ([Descargar](https://www.postgresql.org/download/)) o **Docker**  
+- 📬 **Postman** o **Insomnia** para probar la API ([Descargar Postman](https://www.postman.com/downloads/))  
+- 🔧 *(Opcional)* IDE: IntelliJ IDEA, Eclipse, VS Code
+
+---
+
+### 🚀 Pasos de Instalación (Sin Docker)
+
+#### 1️⃣ Clonar el repositorio
+
+```bash
+git clone https://github.com/MiguelG0929/crudstore-backend.git
+cd crudstore-backend
+```
+2️⃣ Configurar la base de datos PostgreSQL
+
+Accede a la consola de PostgreSQL y crea la base de datos:
+```
+sudo -u postgres psql
+CREATE DATABASE crudstore_db;
+\q
+```
+3️⃣ Configurar application.properties
+Edita el archivo src/main/resources/application.properties con las credenciales de tu base de datos:
+
+```
+# DATA BASE CONFIGURATION
+spring.datasource.url=jdbc:postgresql://localhost:5432/crudstore_db
+spring.datasource.username=postgres
+spring.datasource.password=1234
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA/HIBERNATE CONFIGURATION
+spring.jpa.hibernate.ddl-auto=create-drop  # O 'update' para desarrollo continuo
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+# SERVER CONFIGURATION
+server.port=9525
+
+# JWT SECURITY (Puedes cambiar la clave si quieres)
+security.jwt.key.private=13e84f751d69db68ab9a6a4e46b6f1c7ea3373482549e791b991d09de2d911a8
+security.jwt.user.generator=AUTHOJWT-BACKEND
+```
+4️⃣ Compilar y ejecutar la aplicación
+```
+# Limpiar y compilar el proyecto
+./mvnw clean install
+
+# Ejecutar la aplicación
+./mvnw spring-boot:run
+```
+5️⃣ Verificar la instalación
+
+La aplicación debería estar corriendo en http://localhost:9525. Puedes verificarlo con:
+!Nota es probable que por la seguridad deniegue el acceso desde esta URL
+curl http://localhost:9525/actuator/health
+
+O simplemente abrir en tu navegador e iniciar sesion con los usuarios predeterminados:
+```
+user: admin
+password: admin123
+
+user: user
+password: user123
+
+o crear usuario desde swagger
+```
+http://localhost:9525/swagger-ui.html
