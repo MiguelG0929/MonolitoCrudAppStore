@@ -310,7 +310,7 @@ También puedes explorarlos de forma interactiva en **Swagger UI** una vez la ap
   "status": true
 }
 ```
-🔐 Login — POST /auth/log-in
+### 🔐 Login — `POST /auth/log-in`
 
 ```
 // Request
@@ -327,7 +327,7 @@ También puedes explorarlos de forma interactiva en **Swagger UI** una vez la ap
   "status": true
 }
 ```
-
+</details>
 
 
 
