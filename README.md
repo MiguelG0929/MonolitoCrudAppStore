@@ -157,6 +157,30 @@ Implementa los detalles técnicos: repositorios JPA, configuración de seguridad
 
 ---
 
+<div align="center">
+
+## 💻 Tecnologías Utilizadas
+
+| Categoría | Tecnología | Versión | Badge | Propósito |
+|------------|------------|----------|--------|------------|
+| Lenguaje | Java | 17 | ![Java](https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white) | Lenguaje principal |
+| Framework | Spring Boot | 3.5.10 | ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.10-6DB33F?style=flat-square&logo=spring-boot&logoColor=white) | Framework base |
+| Seguridad | Spring Security | 6.x | ![Security](https://img.shields.io/badge/Security-6.x-2E8B57?style=flat-square) | Autenticación y autorización |
+| Seguridad | JWT (Auth0) | 4.5.0 | ![JWT](https://img.shields.io/badge/JWT-4.5.0-000000?style=flat-square) | Generación y validación de tokens |
+| Persistencia | Spring Data JPA | 3.x | ![JPA](https://img.shields.io/badge/JPA-3.x-yellow?style=flat-square) | Mapeo objeto-relacional |
+| Base de Datos | PostgreSQL | 16 | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-316192?style=flat-square&logo=postgresql&logoColor=white) | Base de datos relacional |
+| Build y Gestión | Maven | 3.8.x | ![Maven](https://img.shields.io/badge/Maven-3.8.x-C71A36?style=flat-square&logo=apache-maven&logoColor=white) | Gestión de dependencias y build |
+| Pruebas | JUnit 5 | — | ![JUnit](https://img.shields.io/badge/JUnit-5-25A162?style=flat-square&logo=junit5&logoColor=white) | Framework de tests unitarios |
+| Pruebas | JaCoCo | 0.8.11 | ![JaCoCo](https://img.shields.io/badge/JaCoCo-0.8.11-FF6F00?style=flat-square) | Cobertura de código |
+| Pruebas | MockMvc | — | ![MockMvc](https://img.shields.io/badge/MockMvc-6.x-lightgrey?style=flat-square) | Pruebas de controladores |
+| Documentación | SpringDoc OpenAPI | 2.8.5 | ![Swagger](https://img.shields.io/badge/OpenAPI-2.8.5-85EA2D?style=flat-square&logo=swagger&logoColor=black) | Generación de documentación Swagger |
+| Infraestructura | Docker | — | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) | Contenerización de la aplicación |
+| Infraestructura | Docker Compose | 3.9 | ![Compose](https://img.shields.io/badge/Compose-3.9-2496ED?style=flat-square&logo=docker&logoColor=white) | Orquestación de contenedores |
+| Utilidades | Lombok | 1.18.30 | ![Lombok](https://img.shields.io/badge/Lombok-1.18.30-CC0000?style=flat-square) | Reducción de código boilerplate |
+| Utilidades | Bean Validation | 3.x | ![Validation](https://img.shields.io/badge/Validation-3.x-lightgrey?style=flat-square) | Validación de datos en DTOs y entidades |
+| IDE Recomendado | IntelliJ IDEA | — | ![IntelliJ](https://img.shields.io/badge/IntelliJ_IDEA-000000?style=flat-square&logo=intellij-idea&logoColor=white) | Entorno de desarrollo recomendado |
+
+</div>
 
 
 
