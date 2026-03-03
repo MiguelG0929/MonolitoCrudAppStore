@@ -364,12 +364,15 @@ También puedes explorarlos de forma interactiva en **Swagger UI** una vez la ap
     "fechaCreacion": "2024-01-15T10:30:00"
   }
 ]
-➕ Crear Categoría — POST /api/categorias/create
+```
+### ➕ Crear Categoría — `POST /api/categorias/create`
+```
 // Request
 {
   "nombre": "Hogar",
   "descripcion": "Productos para el hogar"
 }
+
 // Response (201 CREATED)
 {
   "id": 2,
@@ -378,111 +381,7 @@ También puedes explorarlos de forma interactiva en **Swagger UI** una vez la ap
   "activa": true,
   "fechaCreacion": "2024-01-15T10:32:00"
 }
-</details> ## 📂 Categorías (`/api/categorias`)
-
-<div align="center">
-
-| Método | Endpoint   | Descripción                              | Permiso Requerido | Código HTTP      |
-|--------|------------|------------------------------------------|-------------------|------------------|
-| GET    | /          | Listar todas las categorías activas     | READ              | 200 OK           |
-| GET    | /{id}      | Obtener una categoría por ID            | READ              | 200 OK           |
-| POST   | /create    | Crear una nueva categoría               | CREATE            | 201 CREATED      |
-| PUT    | /{id}      | Actualizar una categoría                | UPDATE            | 200 OK           |
-| DELETE | /{id}      | Eliminar (desactivar) una categoría     | DELETE            | 204 NO CONTENT   |
-
-</div>
-
----
-
-<details>
-<summary><b>📝 Ejemplos de Request/Response para Categorías</b></summary>
-
-<br>
-
-### 📋 Listar Categorías — `GET /api/categorias`
-
-```json
-// Response (200 OK)
-[
-  {
-    "id": 1,
-    "nombre": "Electrónica",
-    "descripcion": "Dispositivos electrónicos y gadgets",
-    "activa": true,
-    "fechaCreacion": "2024-01-15T10:30:00"
-  }
-]
-➕ Crear Categoría — POST /api/categorias/create
-// Request
-{
-  "nombre": "Hogar",
-  "descripcion": "Productos para el hogar"
-}
-// Response (201 CREATED)
-{
-  "id": 2,
-  "nombre": "Hogar",
-  "descripcion": "Productos para el hogar",
-  "activa": true,
-  "fechaCreacion": "2024-01-15T10:32:00"
-}
-
-## 📂 Categorías (`/api/categorias`)
-
-<div align="center">
-
-| Método | Endpoint   | Descripción                              | Permiso Requerido | Código HTTP      |
-|--------|------------|------------------------------------------|-------------------|------------------|
-| GET    | /          | Listar todas las categorías activas     | READ              | 200 OK           |
-| GET    | /{id}      | Obtener una categoría por ID            | READ              | 200 OK           |
-| POST   | /create    | Crear una nueva categoría               | CREATE            | 201 CREATED      |
-| PUT    | /{id}      | Actualizar una categoría                | UPDATE            | 200 OK           |
-| DELETE | /{id}      | Eliminar (desactivar) una categoría     | DELETE            | 204 NO CONTENT   |
-
-</div>
-
----
-
-<details>
-<summary><b>📝 Ejemplos de Request/Response para Categorías</b></summary>
-
-<br>
-
-### 📋 Listar Categorías — `GET /api/categorias`
-
-```json
-// Response (200 OK)
-[
-  {
-    "id": 1,
-    "nombre": "Electrónica",
-    "descripcion": "Dispositivos electrónicos y gadgets",
-    "activa": true,
-    "fechaCreacion": "2024-01-15T10:30:00"
-  }
-]
-➕ Crear Categoría — POST /api/categorias/create
-// Request
-{
-  "nombre": "Hogar",
-  "descripcion": "Productos para el hogar"
-}
-// Response (201 CREATED)
-{
-  "id": 2,
-  "nombre": "Hogar",
-  "descripcion": "Productos para el hogar",
-  "activa": true,
-  "fechaCreacion": "2024-01-15T10:32:00"
-}
- ```
-</details>
-
-
-
-
-
-
+```
 
 
 
