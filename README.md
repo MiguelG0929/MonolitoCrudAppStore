@@ -674,18 +674,113 @@ o crear usuario desde swagger
 ```
 http://localhost:9525/swagger-ui.html
 
-Configuración de Seguridad en Swagger
-Para probar los endpoints protegidos, deberás autenticarte primero. Swagger UI está configurado para permitir la autorización mediante el botón Authorize (con el candado).
+## 🔐 Configuración de Seguridad en Swagger
 
-Haz login en el endpoint /auth/log-in para obtener un token JWT.
+Para probar los endpoints protegidos, debes autenticarte primero. Swagger UI está configurado para permitir la autorización mediante el botón **Authorize** (icono de candado).
 
-Copia el token (sin comillas).
+### Pasos para configurar el token JWT:
 
-Haz clic en el botón Authorize en la parte superior derecha de Swagger UI.
+1️⃣ Haz login en el endpoint `/auth/log-in` para obtener tu **token JWT**.
 
-En el campo Value, introduce Bearer <tu_token> y haz clic en Authorize.
+2️⃣ Copia el token generado (sin comillas).
 
-A partir de ahora, todas las peticiones desde Swagger incluirán el token JWT en el header.
+3️⃣ Haz clic en el botón **Authorize** en la parte superior derecha de Swagger UI.
+
+4️⃣ En el campo **Value**, introduce:
+Bearer <tu_token>
+
+5️⃣ Haz clic en **Authorize**.
+
+---
+
+A partir de ahora, **todas las peticiones desde Swagger incluirán automáticamente el token JWT en el header**, permitiéndote probar los endpoints protegidos de manera segura.
+
+## 🏗️ Patrones de Diseño Implementados
+
+El proyecto no solo es funcional, sino que también demuestra un conocimiento profundo de los **patrones de diseño de software**.  
+
+A continuación, los más relevantes:
+
+<div align="center">
+
+| Patrón de Diseño | ¿Dónde se implementa? | Beneficio |
+|-----------------|----------------------|-----------|
+| **Arquitectura Hexagonal (Ports & Adapters)** | Organización en capas: API, Application, Domain, Infrastructure. Los repositorios son puertos (interfaces) implementados en infraestructura. | Aislamiento del dominio y bajo acoplamiento. El núcleo de negocio no depende de frameworks o bases de datos. |
+| **Inyección de Dependencias (DI)** | En todo el proyecto, usando inyección por constructor en servicios, controladores y utilidades. | Testabilidad, bajo acoplamiento y código más limpio. Spring maneja el ciclo de vida de los objetos. |
+| **DTO (Data Transfer Object)** | Uso de `record` de Java para *CreateDTO y *ResponseDTO. | Desacoplar la capa API de la capa de dominio. Protege las entidades y controla la información enviada al cliente. |
+| **Builder** | En todas las entidades con la anotación `@Builder` de Lombok. | Creación de objetos de forma legible y flexible, especialmente cuando hay muchos atributos. |
+| **Template Method** | En el filtro de seguridad `JWTokenValidator` que extiende `OncePerRequestFilter`. Spring define la estructura y nosotros implementamos `doFilterInternal`. | Reutilización de código y control del flujo. Spring Security maneja la lógica compleja de cuándo ejecutar el filtro. |
+| **Strategy** | En la autenticación, usando `UserDetailsService`. Spring define la estrategia y nosotros implementamos `UserDetailsServiceImpl`. | Flexibilidad para cambiar algoritmos sin modificar el framework. |
+| **Chain of Responsibility** | Propio de Spring Security y los filtros (`JWTokenValidator`). Cada filtro en la cadena puede procesar la petición. | Separación de responsabilidades. Cada filtro se encarga de una tarea específica. |
+| **Singleton** | Los Beans de Spring (`@Service`, `@Repository`, `@Component`) son, por defecto, singletons. | Eficiencia de memoria y rendimiento. Solo existe una instancia compartida de cada servicio/repositorio. |
+| **MVC (Model-View-Controller)** | Spring MVC. Los controladores (`@RestController`) actúan como Controller, las entidades como Model, y la vista es el JSON generado automáticamente. | Separación clara de responsabilidades en la capa web. |
+| **Repository** | Spring Data JPA. Interfaces como `ProductoRepository` y `CategoriaRepository`. | Abstracción de la capa de persistencia. Oculta la complejidad de JPA y proporciona métodos CRUD automáticamente. |
+
+</div>
+
+## 🛣️ Roadmap / Plan Futuro
+
+Este proyecto está en constante evolución. A continuación, se presentan algunas mejoras y funcionalidades planeadas:
+
+- 🖥️ **Frontend en Angular**  
+  Desarrollar una interfaz de usuario atractiva e intuitiva para consumir la API.
+
+- ⚡ **Cache con Redis**  
+  Implementar caché para las consultas de productos y categorías más frecuentes, mejorando el rendimiento.
+
+- 📊 **Monitorización con Spring Boot Actuator y Prometheus/Grafana**  
+  Exponer métricas de la aplicación y crear dashboards para monitorizar su salud en tiempo real.
+
+- 🚀 **Pipeline CI/CD**  
+  Configurar un pipeline de integración y despliegue continuo con GitHub Actions o Jenkins, incluyendo:
+  - Ejecución de tests
+  - Análisis de código
+  - Construcción de la imagen Docker
+  - Despliegue automático
+
+- 🛠️ **Perfiles de Spring**  
+  Definir perfiles `dev` y `prod` para cambiar configuraciones (como `ddl-auto`) según el entorno.
+
+- 🔄 **Implementar Refresh Tokens**  
+  Añadir lógica de refresh tokens para mejorar la experiencia de usuario y la seguridad.
+
+- ✅ **Mejorar cobertura de tests**  
+  Aumentar el mínimo de cobertura de JaCoCo al 85%.
 
 
+## 👥 Autor
+
+**Miguel López** – Desarrollador Backend Java / Spring Boot  
+
+<div align="center">
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MiguelG0929)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lopezmiguel29/)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:lopezirahetamiguelgerardolopez@gmail.com)
+
+</div>
+
+¿Te ha gustado el proyecto?  
+¡No dudes en contactarme para colaboraciones, ofertas de trabajo o simplemente para charlar sobre tecnología!  
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la **licencia MIT**. Consulta el archivo `LICENSE` para más detalles.
+
+```text
+MIT License
+
+Copyright (c) 2024 Miguel López
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files...
+<div align="center">
+```
+
+⭐ Si este proyecto te ha sido útil, ¡no olvides darle una estrella en GitHub! ⭐
+⬆️ Volver al inicio
+
+</div> ```
 
