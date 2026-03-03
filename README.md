@@ -776,9 +776,9 @@ Copyright (c) 2024 Miguel López
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files...
-<div align="center">
 ```
 
+<div align="center">
 ⭐ Si este proyecto te ha sido útil, ¡no olvides darle una estrella en GitHub! ⭐
 ⬆️ Volver al inicio
 
