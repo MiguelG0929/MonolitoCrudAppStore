@@ -448,3 +448,152 @@ También puedes explorarlos de forma interactiva en **Swagger UI** una vez la ap
 ]
 ```
 </details>
+
+📂 Estructura de Archivos
+La organización del proyecto es clara y escalable, siguiendo una estructura modular por funcionalidad.
+
+```
+📦 crudstore-backend/
+├── 📁 .mvn/                                   # Wrapper de Maven
+├── 📁 src/
+│   ├── 📁 main/
+│   │   ├── 📁 java/com/mglopez/crudstore/
+│   │   │   ├── 📁 config/                     # Configuraciones globales
+│   │   │   │   ├── 📄 CorsConfig.java         # Configuración CORS
+│   │   │   │   ├── 📄 DataInitializer.java    # Datos iniciales automáticos
+│   │   │   │   └── 📄 SwaggerConfig.java      # Configuración de OpenAPI/Swagger
+│   │   │   ├── 📁 modules/                    # Módulos funcionales
+│   │   │   │   ├── 📁 auth/                    # 🔐 Módulo de autenticación
+│   │   │   │   │   ├── 📁 api/                  # Capa de presentación (Controllers, DTOs)
+│   │   │   │   │   ├── 📁 application/          # Capa de aplicación (Servicios)
+│   │   │   │   │   ├── 📁 domain/               # Capa de dominio (Entidades, Enums)
+│   │   │   │   │   └── 📁 infrastructure/       # Capa de infraestructura (Repos, Seguridad)
+│   │   │   │   ├── 📁 categoria/                # 📂 Módulo de categorías
+│   │   │   │   │   ├── 📁 api/
+│   │   │   │   │   ├── 📁 application/
+│   │   │   │   │   ├── 📁 domain/
+│   │   │   │   │   └── 📁 infrastructure/
+│   │   │   │   └── 📁 producto/                 # 📦 Módulo de productos
+│   │   │   │       ├── 📁 api/
+│   │   │   │       ├── 📁 application/
+│   │   │   │       ├── 📁 domain/
+│   │   │   │       └── 📁 infrastructure/
+│   │   │   └── 📁 shared/                      # Código compartido
+│   │   │       └── 📁 exception/                # Manejo global de errores
+│   │   │           ├── 📄 GlobalExceptionHandler.java
+│   │   │           ├── 📄 ErrorResponse.java
+│   │   │           └── 📄 BusinessException.java (y subclases)
+│   │   └── 📁 resources/
+│   │       └── 📄 application.properties        # Configuración de la aplicación
+│   └── 📁 test/
+│       └── 📁 java/com/mglopez/crudstore/
+│           └── 📁 modules/
+│               ├── 📁 auth/                      # Tests del módulo auth
+│               ├── 📁 categoria/
+│               │   ├── 📁 api/
+│               │   │   └── 📄 CategoriaControllerTest.java
+│               │   └── 📁 application/
+│               │       └── 📄 CategoriaServiceImplTest.java
+│               └── 📁 producto/
+│                   ├── 📁 api/
+│                   │   └── 📄 ProductoControllerTest.java
+│                   └── 📁 application/
+│                       └── 📄 ProductoServiceImplTest.java
+├── 📄 .gitignore
+├── 📄 docker-compose.yml                         # Orquestación de contenedores
+├── 📄 Dockerfile                                  # Imagen Docker de la aplicación
+├── 📄 mvnw                                        # Wrapper de Maven (Unix)
+├── 📄 mvnw.cmd                                    # Wrapper de Maven (Windows)
+└── 📄 pom.xml                                     # Configuración de Maven
+```
+
+
+## 🗄️ Base de Datos
+
+El modelo de datos está compuesto por **7 tablas principales** que reflejan la lógica de negocio y el sistema de seguridad RBAC.
+
+<div align="center">
+  <img src="docs/DiagramaEntidadRelacion.png" alt="Diagrama Entidad Relación" width="800"/>
+</div>
+
+---
+
+### 📘 Descripción de las Tablas
+
+#### 👤 `users`
+Almacena la información de los usuarios del sistema:
+- `username`
+- `password`
+- Flags de cuenta (`enabled`, `accountNonExpired`, etc.)
+
+---
+
+#### 🛡️ `roles`
+Define los roles disponibles en el sistema:
+- `ADMIN`
+- `USER`
+- `DEVELOPER`
+- `INVITED`
+
+---
+
+#### 🔐 `permissions`
+Define los permisos granulares del sistema:
+- `READ`
+- `CREATE`
+- `UPDATE`
+- `DELETE`
+
+---
+
+#### 🔄 `user_roles`
+Tabla intermedia para la relación **muchos-a-muchos** entre:
+- `users`
+- `roles`
+
+Un usuario puede tener múltiples roles.
+
+---
+
+#### 🔄 `role_permissions`
+Tabla intermedia para la relación **muchos-a-muchos** entre:
+- `roles`
+- `permissions`
+
+Cada rol puede tener múltiples permisos asociados.
+
+---
+
+#### 📂 `categorias`
+Almacena las categorías de productos:
+- `nombre`
+- `descripcion`
+- `activa`
+- `fechaCreacion`
+
+---
+
+#### 📦 `productos`
+Almacena los productos del sistema:
+- `name`
+- `descripcion`
+- `precio`
+- `activo`
+- `fechaCreacion`
+- `categoria_id` (clave foránea hacia `categorias`)
+
+---
+
+### 🧠 Diseño del Modelo
+
+- Se implementa un esquema **normalizado**
+- Se respeta el principio de **separación de responsabilidades**
+- Seguridad desacoplada del dominio de negocio
+- Relaciones many-to-many gestionadas mediante tablas intermedias
+- Integridad referencial mediante claves foráneas
+
+
+
+
+
+
