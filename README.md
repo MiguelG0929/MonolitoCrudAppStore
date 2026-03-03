@@ -182,6 +182,30 @@ Implementa los detalles técnicos: repositorios JPA, configuración de seguridad
 
 </div>
 
+## 🔐 Modelo de Seguridad (RBAC)
+
+El sistema implementa un modelo de seguridad **RBAC (Role-Based Access Control)** con permisos granulares, gestionado mediante **Spring Security** y autenticación basada en **JWT**.
+
+---
+
+### 🧩 Diagrama de Roles y Permisos
+
+![Diagrama de Seguridad](docs/diagramaSecurityRoles.png)
+
+---
+
+### 📊 Matriz de Acceso (Permisos por Rol)
+
+<div align="center">
+
+| Rol       | READ | CREATE | UPDATE | DELETE |
+|------------|------|--------|--------|--------|
+| ADMIN      | ✅   | ✅     | ✅     | ✅     |
+| USER       | ✅   | ✅     | ❌     | ❌     |
+| DEVELOPER  | ✅   | ✅     | ✅     | ❌     |
+| INVITED    | ✅   | ❌     | ❌     | ❌     |
+
+</div>
 
 
 
