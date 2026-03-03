@@ -673,3 +673,19 @@ password: user123
 o crear usuario desde swagger
 ```
 http://localhost:9525/swagger-ui.html
+
+Configuración de Seguridad en Swagger
+Para probar los endpoints protegidos, deberás autenticarte primero. Swagger UI está configurado para permitir la autorización mediante el botón Authorize (con el candado).
+
+Haz login en el endpoint /auth/log-in para obtener un token JWT.
+
+Copia el token (sin comillas).
+
+Haz clic en el botón Authorize en la parte superior derecha de Swagger UI.
+
+En el campo Value, introduce Bearer <tu_token> y haz clic en Authorize.
+
+A partir de ahora, todas las peticiones desde Swagger incluirán el token JWT en el header.
+
+
+
